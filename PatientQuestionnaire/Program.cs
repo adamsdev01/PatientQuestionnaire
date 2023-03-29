@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.EntityFrameworkCore;
+using PatientQuestionnaire.Data;
+using PatientQuestionnaire.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,10 +10,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddTelerikBlazor();
+builder.Services.AddScoped<IDrugQuestionnaireRepository, DrugQuestionnaireRepository>();
 
 // Add ConnectionString
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-//builder.Services.AddDbContext<InternalCasesDBContext>(x => x.UseSqlServer(connectionString));
+builder.Services.AddDbContext<PatientQuestionnaireDBContext>(x => x.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
