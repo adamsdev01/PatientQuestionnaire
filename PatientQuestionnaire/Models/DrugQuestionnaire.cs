@@ -14,7 +14,5 @@ namespace PatientQuestionnaire.Models
         public string? IsSuicidal { get; set; }
         public string? InterestedInTherapy { get; set; }
         public DateTime? InsertedDate { get; set; }
-
-        public virtual DrugList? DrugList { get; set; }
     }
 }

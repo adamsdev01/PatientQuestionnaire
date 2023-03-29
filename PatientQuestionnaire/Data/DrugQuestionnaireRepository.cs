@@ -8,7 +8,7 @@ namespace PatientQuestionnaire.Data
     {
         private readonly PatientQuestionnaireDBContext _context;
 
-        public  DrugQuestionnaireRepository(PatientQuestionnaireDBContext context)
+        public DrugQuestionnaireRepository(PatientQuestionnaireDBContext context)
         {
             _context = context;
         }
@@ -16,7 +16,6 @@ namespace PatientQuestionnaire.Data
         public async Task<IEnumerable<DrugQuestionnaire>> GetDrugQuestionnaires()
         {
             return await _context.DrugQuestionnaires
-                .Include(q => q.DrugList)
                 .ToListAsync();
         }
 
@@ -44,6 +43,6 @@ namespace PatientQuestionnaire.Data
             var questionnaire = await GetQuestionnaire(questionnaireId);
             _context.DrugQuestionnaires?.Remove(questionnaire);
             await _context.SaveChangesAsync();
-        }    
+        }
     }
 }

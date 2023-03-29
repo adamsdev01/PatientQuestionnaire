@@ -16,8 +16,8 @@ namespace PatientQuestionnaire.Models
         {
         }
 
+        public virtual DbSet<CommonDrug> CommonDrugs { get; set; } = null!;
         public virtual DbSet<CurrentPatient> CurrentPatients { get; set; } = null!;
-        public virtual DbSet<DrugList> DrugLists { get; set; } = null!;
         public virtual DbSet<DrugQuestionnaire> DrugQuestionnaires { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -31,6 +31,20 @@ namespace PatientQuestionnaire.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<CommonDrug>(entity =>
+            {
+                entity.HasKey(e => e.DrugListId)
+                    .HasName("PK__CommonDr__2D1DD14777B8E0EE");
+
+                entity.Property(e => e.DrugListId)
+                    .ValueGeneratedNever()
+                    .HasColumnName("DrugList_Id");
+
+                entity.Property(e => e.DrugName)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<CurrentPatient>(entity =>
             {
                 entity.HasKey(e => e.PatientId)
@@ -71,29 +85,6 @@ namespace PatientQuestionnaire.Models
                 entity.Property(e => e.PatientNumber)
                     .HasMaxLength(50)
                     .IsUnicode(false);
-            });
-
-            modelBuilder.Entity<DrugList>(entity =>
-            {
-                entity.ToTable("DrugList");
-
-                entity.HasIndex(e => e.FkQuestionnaireId, "UQ__DrugList__BDC3FAA4210E98A1")
-                    .IsUnique();
-
-                entity.Property(e => e.DrugListId)
-                    .ValueGeneratedNever()
-                    .HasColumnName("DrugList_Id");
-
-                entity.Property(e => e.DrugName)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.FkQuestionnaireId).HasColumnName("FK_Questionnaire_Id");
-
-                entity.HasOne(d => d.FkQuestionnaire)
-                    .WithOne(p => p.DrugList)
-                    .HasForeignKey<DrugList>(d => d.FkQuestionnaireId)
-                    .HasConstraintName("FK__DrugList__FK_Que__4CA06362");
             });
 
             modelBuilder.Entity<DrugQuestionnaire>(entity =>
